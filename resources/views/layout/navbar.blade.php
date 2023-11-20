@@ -1,7 +1,7 @@
 <div class="nav-header">
     <div class="brand-logo">
         <a href="index.html">
-            <b class="logo-abbr"><img src="{{asset ('assets')}}/images/logo.png" alt=""> </b>
+            <b class="logo-abbr"><img src="{{asset ('assets')}}/images/PENA.png" alt=""> </b>
             <span class="logo-compact"><img src="{{asset ('assets')}}/./images/logo-compact.png" alt=""></span>
             <span class="brand-title">
                 <h2 class="text-white">Absensi</h2>

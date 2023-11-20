@@ -2,7 +2,7 @@
     <div class="nk-nav-scroll">
         <ul class="metismenu" id="menu">
             <li>
-                <a class="" href="javascript:void()" aria-expanded="false">
+                <a class="" href="/" aria-expanded="false">
                     <i class="icon-speedometer"></i><span class="nav-text">Dashboard</span>
                 </a>
             </li>
@@ -12,7 +12,7 @@
                 </a>
             </li>
             <li>
-                <a class="" href="javascript:void()" aria-expanded="false">
+                <a class="" href="/daftarkegiatan" aria-expanded="false">
                     <i class="icon-note"></i><span class="nav-text">Daftar Kegiatan</span>
                 </a>
             </li>

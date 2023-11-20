@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('Pages.dashboard');
 });
+
+Route::get('/daftarkegiatan', function () {
+    return view('Pages.kegiatan');
+});
