@@ -25,18 +25,21 @@
             </div>
         </div>
     </div>
+
     <div class="col-lg-3 col-sm-6">
         <div class="card gradient-3">
             <div class="card-body">
                 <h3 class="card-title text-white">Daftar Kegiatan</h3>
                 <div class="d-inline-block">
-                    <h2 class="text-white">1</h2>
-                    <p class="text-white mb-0">Jan - March 2019</p>
+                    <h2 class="text-white" id="kegiatan"></h2>
+                    <p class="text-white mb-0">Januari - Maret 2019</p>
+                    <a href=""></a>
                 </div>
                 <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
             </div>
         </div>
     </div>
+    
     <div class="col-lg-3 col-sm-6">
         <div class="card gradient-4">
             <div class="card-body">
@@ -50,4 +53,20 @@
         </div>
     </div>
 </div>
+@section('script')
+<script>
+     $.ajax({
+            url: `/api/v1/countKegiatan`,
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                console.log(response)
+                $('#kegiatan').text(response.countkegiatan);
+            },
+            error: function() {
+                console.log("Gagal mendapatkan jumlah kegiatan dari server");
+            }
+        });
+</script>
+@endsection
 @endsection

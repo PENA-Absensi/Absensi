@@ -25,4 +25,5 @@ Route::prefix('v1')->controller(kegiatanController::class)->group(function (){
     Route::get('/edit/{id}', 'editDataById');
     Route::post('/update/{id}', 'updateData');
     Route::delete('delete/{id}', 'deleteData');
+    Route::get('/countKegiatan', [KegiatanController::class, 'countKegiatan']);
 });

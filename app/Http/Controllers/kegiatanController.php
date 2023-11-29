@@ -21,7 +21,6 @@ class kegiatanController extends Controller
             return response()->json([
                 'code' => 404,
                 'message' => 'data not found',
-                'data' => $data
             ]);
         }else {
             return response()->json([
@@ -222,4 +221,11 @@ class kegiatanController extends Controller
 
         // Lakukan sesuatu dengan $timeLimit
     }
+    public function countKegiatan()
+    {
+        $count = KegiatanModel::count();
+
+        return response()->json(['countkegiatan' => $count]);
+    }
+    
 }
