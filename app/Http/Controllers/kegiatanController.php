@@ -135,8 +135,6 @@ class kegiatanController extends Controller
                     'jam_mulai.required' => 'jam mulai tidak boleh kosong',
                     'jam_selesai.required' => 'jam selesai tidak boleh kosong',
                     'deskripsi.required' => 'form deskripsi tidak boleh kosong',
-                    'foto.mimes' => 'foto harus jpg,jpeg',
-                    'foto.max' => 'foto maksimal 5 mb'
                 ]
             );
             if ($validation->fails()) {
