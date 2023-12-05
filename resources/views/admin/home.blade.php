@@ -61,7 +61,7 @@
             dataType: "json",
             success: function(response) {
                 console.log(response)
-                $('#kegiatan').text(response.countkegiatan);
+                $('#kegiatan').text(response.countKegiatan);
             },
             error: function() {
                 console.log("Gagal mendapatkan jumlah kegiatan dari server");

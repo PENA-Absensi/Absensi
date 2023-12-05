@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\kegiatanController;
 use Illuminate\Http\Request;
@@ -25,5 +26,12 @@ Route::prefix('v1')->controller(kegiatanController::class)->group(function (){
     Route::get('/edit/{id}', 'editDataById');
     Route::post('/update/{id}', 'updateData');
     Route::delete('delete/{id}', 'deleteData');
-    Route::get('/countKegiatan', [KegiatanController::class, 'countKegiatan']);
+});
+
+Route::prefix('v1')->controller(AdminController::class)->group(function () {
+    Route::get('/get', 'getAllData');
+    Route::post('/create',  'createData');
+    Route::get('/edit/{id}', 'editDataById');
+    Route::post('/update/{id}', 'updateData');
+    Route::delete('/delete/{id}', 'deleteData');
 });

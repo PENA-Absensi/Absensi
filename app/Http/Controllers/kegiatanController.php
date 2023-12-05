@@ -225,7 +225,7 @@ class kegiatanController extends Controller
     {
         $count = KegiatanModel::count();
 
-        return response()->json(['countkegiatan' => $count]);
+        return response()->json(['countk' => $count]);
     }
     
 }

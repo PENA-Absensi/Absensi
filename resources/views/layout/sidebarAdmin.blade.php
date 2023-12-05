@@ -1,4 +1,10 @@
-<div class="nk-sidebar">           
+<div class="nk-sidebar"> 
+    <style>
+        .nk-sidebar {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.164); /* Menambahkan bayangan pada sidebar */
+        }
+    </style>
+              
     <div class="nk-nav-scroll">
         <ul class="metismenu" id="menu">
             <li>
