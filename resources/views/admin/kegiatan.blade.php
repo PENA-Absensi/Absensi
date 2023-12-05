@@ -84,10 +84,14 @@
                                 </div>
                                 <div class="form-group fill">
                                     <label>Foto</label>
-                                    <input id="foto" name="foto" type="file" class="form-control"
-                                        placeholder="input here..." autocomplete="off">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="foto" name="foto" accept="image/*">
+                                        <label class="custom-file-label" for="foto">Pilih file</label>
+                                    </div>
                                     <small id="foto-error" class="text-danger"></small>
                                 </div>
+                                
+                                
                             </div>
                         </div>
                     </form>
@@ -161,6 +165,9 @@
                     $('#jam_mulai').val(data.jam_mulai);
                     $('#jam_selesai').val(data.jam_selesai);
                     $('#deskripsi').val(data.deskripsi);
+                    $('#preview').attr('src', '/uploads/foto/' + data.foto);
+                    var fileName = data.foto;
+                    $('.custom-file-label').text(fileName);
                     $('#KegiatanModal').modal('show');
                 }
 
@@ -179,11 +186,33 @@
                     });
                 });
 
+                // Fungsi untuk menampilkan gambar sebelum mengunggahnya dan menampilkan nama file
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#preview').attr('src', e.target.result);
+                        }
+                        reader.readAsDataURL(input.files[0]);
+
+                        // Menampilkan nama file di dalam input file
+                        var fileName = input.files[0].name;
+                        $('.custom-file-label').text(fileName);
+                    }
+                }
+
+                // Mengatur event handler untuk input file
+                $("#foto").change(function () {
+                    readURL(this);
+                });
+
                 // Tombol tambah data diklik
                 $(document).on('click', '#addKegiatan', function() {
                     $('#KegiatanModalLable').text('Tambah Data');
                     $('#upsertData')[0].reset();
                     $('#id').val('');
+                    $('#preview').attr('src', '');
+                    $('.custom-file-label').text('Pilih file');
                     $('#KegiatanModal').modal('show');
                 });
 
