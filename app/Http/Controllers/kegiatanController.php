@@ -40,7 +40,7 @@ class kegiatanController extends Controller
                 'jam_mulai' => 'required',
                 'jam_selesai' => 'required',
                 'deskripsi' => 'required',
-                'foto' => 'required|mimes:png,jpg,jpeg'
+                'foto' => 'required|mimes:png,jpg,jpeg|max:5000'
             ],
             [
                 'nama_kegiatan.required' => 'form nama kegiatan tidak boleh kosong',
@@ -49,7 +49,8 @@ class kegiatanController extends Controller
                 'jam_selesai.required' => 'jam selesai tidak boleh kosong',
                 'deskripsi.required' => 'form deskripsi tidak boleh kosong',
                 'foto.required' => 'foto tidak boleh kosong',
-                'foto.mines' => 'foto harus jpg,jpeg'
+                'foto.mines' => 'foto harus jpg,jpeg',
+                'foto.max' => 'foto maksimal 5 mb'
             ]
         );
         if ($validation->fails()) {
@@ -125,7 +126,7 @@ class kegiatanController extends Controller
                     'jam_mulai' => 'required',
                     'jam_selesai' => 'required',
                     'deskripsi' => 'required',
-                    'foto' => 'required|mimes:png,jpeg,jpg',
+                    'foto' => 'required|mimes:png,jpeg,jpg|max:5000',
                 ],
                 [
                     'nama_kegiatan.required' => 'form nama kegiatan tidak boleh kosong',
@@ -133,7 +134,6 @@ class kegiatanController extends Controller
                     'jam_mulai.required' => 'jam mulai tidak boleh kosong',
                     'jam_selesai.required' => 'jam selesai tidak boleh kosong',
                     'deskripsi.required' => 'form deskripsi tidak boleh kosong',
-                    'foto.mimes' => 'foto harus jpg,jpeg'
                 ]
             );
             if ($validation->fails()) {
@@ -200,32 +200,4 @@ class kegiatanController extends Controller
             'message' => 'delete data success'
         ]);
     }
-    public function calculateTimeLimit($baseTime, $hoursToAdd, $minutesToAdd) {
-        // Konversi waktu awal ke dalam objek DateTime
-        $dateTime = new DateTime($baseTime);
-
-        // Tambahkan jumlah jam dan menit ke dalam objek DateTime
-        $dateTime->add(new DateInterval("PT{$hoursToAdd}H{$minutesToAdd}M"));
-
-        // Format hasil waktu ke dalam format yang diinginkan (misalnya: H:i:s)
-        return $dateTime->format('H:i:s');
-    }
-
-    // Contoh penggunaan di dalam sebuah metode controller
-    public function someControllerMethod() {
-        $baseTime = '10:00:00';
-        $hoursToAdd = 2;
-        $minutesToAdd = 30;
-
-        $timeLimit = $this->calculateTimeLimit($baseTime, $hoursToAdd, $minutesToAdd);
-
-        // Lakukan sesuatu dengan $timeLimit
-    }
-    public function countKegiatan()
-    {
-        $count = KegiatanModel::count();
-
-        return response()->json(['countk' => $count]);
-    }
-    
 }
