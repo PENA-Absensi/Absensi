@@ -1,6 +1,24 @@
 @extends('layout.index')
+
 @section('style')
+    <style>
+        /* Menambahkan jarak antara navbar dan elemen dashboard */
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        /* Menambahkan jarak antara sidebar dan elemen dashboard */
+        .nk-sidebar {
+            margin-right: 20px;
+        }
+
+        /* Menambahkan jarak antara elemen-elemen dashboard */
+        .row {
+            margin-bottom: 20px;
+        }
+    </style>
 @endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-3 col-sm-6">
@@ -53,5 +71,6 @@
         </div>
     </div>
 @endsection
+
 @section('script')
-@endsection
+@endsection 

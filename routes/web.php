@@ -15,56 +15,42 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Halaman admin
 
-// Route::get('/', function () {
-//     return view('Pages.dashboard');
-// });
+Route::prefix('/')->group(function () {
+    Route::get('/admin', function () {
+        return view('admin.home');
+    })->name('home');
 
-// Route::middleware(['guest'])->group(function(){
-//     Route::get('/',[SesiController::class,'index'])->name('login');
-//     Route::post('/',[SesiController::class,'login']);
-// });
+    Route::get('/Data-absensi', function () {
+        return view('admin.status');
+    })->name('status');
 
-// Route::middleware(['auth'])->group(function(){
-//     Route::get('/admin',[AdminController::class,'index']);
-//     Route::get('/logout',[SesiController::class,'logout']);
-// });
 
-// adminn
-// routes/web.php
+    Route::get('/Data-kegiatan', function () {
+        return view('admin.kegiatan');
+    })->name('kegiatan');
 
-Route::prefix('/admin')->controller(AdminController::class)->group(function () {
-    Route::get('/Data-absensi', [AdminController::class, 'status'])->name('status');
-    Route::get('/home', [AdminController::class, 'home'])->name('home');
-    Route::get('/Data-kegiatan', [AdminController::class, 'kegiatan'])->name('kegiatan');
-    Route::get('/manajemen-user', [AdminController::class, 'manajemen'])->name('manajemen');
+    Route::get('/manajemen-user', function () {
+        return view('admin.manajemen');
+    })->name('manajemen');
+});
+// akhir Halaman admin
+
+// Halaman users
+
+Route::prefix('/users')->group(function () {
+
+    Route::get('/status-user', function () {
+        return view('users.statusUser');
+    })->name('statusUser');
+
+    Route::get('/kegiatan-user', function () {
+        return view('users.kegiatanUser');
+    })->name('kegiatanUser');
 });
 
-
-// akhir admin
-
-// users
-Route::prefix('/users')->controller(UsersController::class)->group(function () {
-    Route::get('/status-user', [UsersController::class, 'master'])->name('statusUser');
-    Route::get('/kegiatan-user', [UsersController::class, 'KegiatanUser'])->name('kegiatanUser');
-
-});
-Route::get('/users',function(){
+Route::get('/users', function () {
     return view('users.statusUser');
 });
-Route::get('/kegiatan-User',function(){
-    return view('users.kegiatanUser');
-});
-
-// akhir Users
-
-// Admin
-Route::get('/',function(){
-    return redirect('/admin');
-});
-Route::get('/admin',function(){
-    return view('admin.home');
-});
-// Akhir Admin
-
-
+// akhir Halaman Users
