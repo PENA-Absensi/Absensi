@@ -1,6 +1,4 @@
 @extends('layout.index')
-@section('style')
-@endsection
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -49,11 +47,16 @@
                         @csrf
                         <div class="row py-2">
                             <div class="col-md-12">
+                                <div class="text-center">
+                                    <img src="" alt="" id="preview" class="mx-auto d-block pb-2"
+                                        style="max-width: 200px; padding-top: 23px">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <input type="hidden" id="id" name="id" value="">
                                 <div class="form-group fill">
                                     <label>Nama Kegiatan</label>
-                                    <input id="nama_kegiatan" name="nama_kegiatan" type="text" class="form-control"
-                                        placeholder="input here..." autocomplete="off">
+                                    <input id="nama_kegiatan" name="nama_kegiatan" type="text" class="form-control" placeholder="input here..." autocomplete="off">
                                     <small id="nama_kegiatan-error" class="text-danger"></small>
                                 </div>
                                 <div class="form-group fill">
@@ -91,7 +94,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="simpanData" class="btn btn-primary">Simpan Data</button>
+                    <button type="button" id="simpanData" class="btn btn-primary">
+                        Simpan Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -108,7 +113,7 @@
                     method: "GET",
                     dataType: "json",
                     success: function(response) {
-                        console.log(response.data.length, '<-- data');
+                        console.log(response);
                         let tableBody = "";
                         $.each(response.data, function(index, item) {
                             tableBody += "<tr>";
@@ -138,7 +143,6 @@
                         console.log("failed to get data from server");
                     }
                 });
-                getDataKegiatan();
             }
 
             $.ajaxSetup({
@@ -147,48 +151,58 @@
                 }
             });
             // edit data
-            $(document).on('click', '.edit-modal', function() {
-                let id = $(this).data('id');
-                $('#KegiatanModalLable').text('Edit Data');
-                $.ajax({
-                    type: 'GET',
-                    url: `/api/v1/edit/${id}`,
-                    success: function(response) {
-                        $('#id').val(response.data.id);
-                        $('#nama_kegiatan').val(response.data.nama_kegiatan);
-                        $('#tanggal').val(response.data.tanggal);
-                        $('#jam_mulai').val(response.data.jam_mulai);
-                        $('#jam_selesai').val(response.data.jam_selesai);
-                        $('#deskripsi').val(response.data.deskripsi);
-                        $('#KegiatanModal').modal('show');
-                    },
-                    error: function(error) {
-                        console.error('Gagal mengambil data', error);
-                    }
+            $(document).ready(function() {
+                // Fungsi untuk menampilkan data ke dalam modal
+                function displayDataInModal(data) {
+                    $('#KegiatanModalLable').text('Edit Data');
+                    $('#id').val(data.id);
+                    $('#nama_kegiatan').val(data.nama_kegiatan);
+                    $('#tanggal').val(data.tanggal);
+                    $('#jam_mulai').val(data.jam_mulai);
+                    $('#jam_selesai').val(data.jam_selesai);
+                    $('#deskripsi').val(data.deskripsi);
+                    $('#KegiatanModal').modal('show');
+                }
+
+                // Tombol edit diklik
+                $(document).on('click', '.edit-modal', function() {
+                    let id = $(this).data('id');
+                    $.ajax({
+                        type: 'GET',
+                        url: `/api/v1/edit/${id}`,
+                        success: function(response) {
+                            displayDataInModal(response.data);
+                        },
+                        error: function(error) {
+                            console.error('Gagal mengambil data', error);
+                        }
+                    });
                 });
-                getDataKegiatan();
-            });
-            $(document).on('click', '#addKegiatan', function() {
-                $('#KegiatanModalLable').text('Tambah Data');
-                $('#upsertData')[0].reset();
-                $('#id').val('');
-                $('#KegiatanModal').modal('show');
-                getDataKegiatan();
-            });
-            // clear text jika validasinya muncul
-            $('#KegiatanModal').on('hidden.bs.modal', function() {
-                $('.text-danger').text('');
-                getDataKegiatan();
+
+                // Tombol tambah data diklik
+                $(document).on('click', '#addKegiatan', function() {
+                    $('#KegiatanModalLable').text('Tambah Data');
+                    $('#upsertData')[0].reset();
+                    $('#id').val('');
+                    $('#KegiatanModal').modal('show');
+                });
+
+                // Clear text jika validasi muncul ketika modal ditutup
+                $('#KegiatanModal').on('hidden.bs.modal', function() {
+                    $('.text-danger').text('');
+                    $('#foto').val('');
+                });
+
+                // Fungsi untuk menampilkan alert
+                function showSweetAlert(icon, title, message) {
+                    Swal.fire({
+                        icon: icon,
+                        title: title,
+                        text: message
+                    });
+                }
             });
 
-            // alert
-            function showSweetAlert(icon, title, message) {
-                Swal.fire({
-                    icon: icon,
-                    title: title,
-                    text: message
-                });
-            }
             // create adn update data
             $(document).on('click', '#simpanData', function(e) {
                 e.preventDefault();
@@ -202,7 +216,7 @@
                 var deskripsi = $('#deskripsi').val();
                 var batas_waktu = jam_selesai;
 
-            
+
                 var formData = new FormData();
                 formData.append('id', id);
                 formData.append('nama_kegiatan', nama_kegiatan);
@@ -212,39 +226,20 @@
                 formData.append('deskripsi', deskripsi);
                 formData.append('foto', $('#foto')[0].files[0]);
 
+                $('#simpanData').prop('disabled', true);
+                $('.spinner-border').show();
+
                 if (id) {
                     $.ajax({
-                        type: 'POST', 
+                        type: 'POST',
                         url: `/api/v1/update/${id}`,
-                        data: formData,
-                        processData: false,
-                        contentType: false, 
-                        success: function(response) {
-                            console.log(response);
-                            if (response.code === 422) {
-                                let errors = response.errors;
-                                $.each(errors, function(key, value) {
-                                    $('#' + key + '-error').text(value[0]);
-                                });
-                            } else if (response.code === 200) {
-                                $('#KegiatanModal').modal('hide');
-                                showSweetAlert('success', 'Success!',
-                                    'Data berhasil diperbaharui!');
-                                getDataKegiatan();
-                            } else {
-                                showSweetAlert('error', 'Error!', 'Gagal memperbaharui data!');
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: 'POST', 
-                        url: '/api/v1/create',
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function(response) {
                             console.log(response);
+                            $('#simpanData').prop('disabled', false);
+                            $('.spinner-border').hide();
                             if (response.code === 422) {
                                 let errors = response.errors;
                                 $.each(errors, function(key, value) {
@@ -252,16 +247,43 @@
                                 });
                             } else if (response.code === 200) {
                                 $('#KegiatanModal').modal('hide');
-                                showSweetAlert('success', 'Success!',
-                                    'Data berhasil ditambahkan!');
+                                Swal.fire('Success', 'data berhasil diperbarui', 'success')
                                 getDataKegiatan();
                             } else {
-                                showSweetAlert('error', 'Error!', 'Gagal menambah data!');
+                                Swal.fire('Error', 'Gagal memperbarui data', 'error');
                             }
                         }
                     });
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/v1/create',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        // ...
+                    success: function(response) {
+                        console.log(response);
+                        $('#simpanData').prop('disabled', false);
+                        $('.spinner-border').hide();
+
+                        if (response.code === 422) {
+                            let errors = response.errors;
+                            $.each(errors, function(key, value) {
+                                $('#' + key + '-error').text(value[0]);
+                            });
+                        } else if (response.code === 200) {
+                            $('#KegiatanModal').modal('hide');
+                            Swal.fire('Success', 'data berhasil diperbarui', 'success');
+                            getDataKegiatan();
+                        } else {
+                            Swal.fire('Error', 'Gagal memperbarui data', 'error');
+                        }
+                    },
+                    // ...
+
+                    });
                 }
-                getDataKegiatan();
             });
             // delete data
             $(document).on('click', '.delete-confirm', function() {
@@ -288,34 +310,8 @@
                         });
                     }
                 });
-                getDataKegiatan();
             });
-        //     function getDataKegiatan() {
-        // $.ajax({
-        //     url: `/api/v1/countKegiatan`,
-        //     method: "GET",
-        //     dataType: "json",
-        //     success: function(response) {
-        //         console.log(response)
-        //         $('#Kegiatan').text(response.count);
-        //     },
-        //     error: function() {
-        //         console.log("Gagal mendapatkan jumlah kegiatan dari server");
-        //     }
-        // });
-        
-        $.ajax({
-            url: `/api/v1/countKegiatan`,
-            method: "GET",
-            dataType: "json",
-            success: function(response) {
-                console.log(response)
-                $('#Kegiatan').text(response.count);
-            },
-            error: function() {
-                console.log("Gagal mendapatkan jumlah kegiatan dari server");
-            }
         });
-
-});
+    </script>
 @endsection
+
