@@ -40,7 +40,7 @@ class kegiatanController extends Controller
                 'jam_mulai' => 'required',
                 'jam_selesai' => 'required',
                 'deskripsi' => 'required',
-                'foto' => 'required|mimes:png,jpg,jpeg|max:5000'
+                'foto' => 'required|mimes:png,jpeg,jpg|max:5000',
             ],
             [
                 'nama_kegiatan.required' => 'form nama kegiatan tidak boleh kosong',
@@ -49,15 +49,15 @@ class kegiatanController extends Controller
                 'jam_selesai.required' => 'jam selesai tidak boleh kosong',
                 'deskripsi.required' => 'form deskripsi tidak boleh kosong',
                 'foto.required' => 'foto tidak boleh kosong',
-                'foto.mines' => 'foto harus jpg,jpeg',
+                'foto.mimes' => 'foto harus jpeg,jpg,png',
                 'foto.max' => 'foto maksimal 5 mb'
             ]
         );
         if ($validation->fails()) {
             return response()->json([
                 'code' => 422,
-                'message' => 'check your validation',
-                'data' => $validation->errors()
+                'message' => 'validation failed',
+                'errors' => $validation->errors(),
             ]);
         }
         try {
@@ -126,7 +126,7 @@ class kegiatanController extends Controller
                     'jam_mulai' => 'required',
                     'jam_selesai' => 'required',
                     'deskripsi' => 'required',
-                    'foto' => 'required|mimes:png,jpeg,jpg|max:5000',
+                    'foto' => 'mimes:png,jpeg,jpg|max:5000',
                 ],
                 [
                     'nama_kegiatan.required' => 'form nama kegiatan tidak boleh kosong',
@@ -134,13 +134,14 @@ class kegiatanController extends Controller
                     'jam_mulai.required' => 'jam mulai tidak boleh kosong',
                     'jam_selesai.required' => 'jam selesai tidak boleh kosong',
                     'deskripsi.required' => 'form deskripsi tidak boleh kosong',
+                    'foto.max' => 'foto maksimal 5 mb'
                 ]
             );
             if ($validation->fails()) {
                 return response()->json([
-                    'code' => 404,
-                    'message' => 'data not found',
-                    'data' => $validation->errors()
+                    'code' => 422,
+                    'message' => 'validation failed',
+                    'errors' => $validation->errors(),
                 ]);
             }
                 $data->nama_kegiatan = $request->input('nama_kegiatan');
