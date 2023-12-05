@@ -16,9 +16,9 @@
 <!--**********************************
     Header start
 ***********************************-->
-<div class="header">    
+<div class="header">
     <div class="header-content clearfix">
-        
+
         <div class="nav-control">
             <div class="hamburger">
                 <span class="toggle-icon"><i class="icon-menu"></i></span>
@@ -34,7 +34,7 @@
                     <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                         <div class="dropdown-content-body">
                             <ul>
-                                <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a></li>
+                                <li><a href="{{ route('logout') }}"><i class="icon-key"></i> <span>Logout</span></a></li>
                             </ul>
                         </div>
                     </div>

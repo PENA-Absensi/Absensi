@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SesiController;
 use App\Http\Controllers\UsersController;
@@ -29,22 +30,36 @@ use Illuminate\Support\Facades\Route;
 //     Route::get('/admin',[AdminController::class,'index']);
 //     Route::get('/logout',[SesiController::class,'logout']);
 // });
+Route::get('/', function () {
+    return view('auth.login');
+});
 
+Route::prefix('/auth')->controller(AuthController::class)->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login-proses', [AuthController::class, 'login_proses'])->name('login-proses');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register-proses', [AuthController::class, 'register_proses'])->name('register-proses');
+
+});
 // adminn
 // routes/web.php
 
-Route::prefix('/admin')->controller(AdminController::class)->group(function () {
+Route::group(['prefix' => 'admin','middleware' => ['auth'], 'as' => 'admin.'] , function(){
     Route::get('/Data-absensi', [AdminController::class, 'status'])->name('status');
     Route::get('/home', [AdminController::class, 'home'])->name('home');
     Route::get('/Data-kegiatan', [AdminController::class, 'kegiatan'])->name('kegiatan');
-    Route::get('/manajemen-user', [AdminController::class, 'manajemen'])->name('manajemen');
+    Route::get('/manajemen-user', [AuthController::class, 'manajemen'])->name('manajemen');
+
+    Route::delete('/delete/{id}' , [AuthController::class , 'deleteData'])->name('deleteData');
 });
 
 
 // akhir admin
 
 // users
-Route::prefix('/users')->controller(UsersController::class)->group(function () {
+Route::group(['prefix' => 'user','middleware' => ['auth'], 'as' => 'user.'] , function(){
     Route::get('/status-user', [UsersController::class, 'master'])->name('statusUser');
     Route::get('/kegiatan-user', [UsersController::class, 'KegiatanUser'])->name('kegiatanUser');
 
@@ -59,12 +74,12 @@ Route::get('/kegiatan-User',function(){
 // akhir Users
 
 // Admin
-Route::get('/',function(){
-    return redirect('/admin');
-});
-Route::get('/admin',function(){
-    return view('admin.home');
-});
+// Route::get('/',function(){
+//     return redirect('/admin');
+// });
+// Route::get('/admin',function(){
+//     return view('admin.home');
+// });
 // Akhir Admin
 
 
